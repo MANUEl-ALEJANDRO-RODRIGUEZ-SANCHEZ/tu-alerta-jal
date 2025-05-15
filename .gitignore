@@ -1,0 +1,59 @@
+# --------------------------------------
+# 🔁 General (para todos los servicios)
+# --------------------------------------
+
+# Node modules
+**/node_modules/
+
+# Yarn, PNPM, NPM debug files
+**/.pnp
+**/.pnp.*
+**/.yarn/*
+!**/.yarn/patches
+!**/.yarn/plugins
+!**/.yarn/releases
+!**/.yarn/versions
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/.pnpm-debug.log*
+
+# Coverage (tests)
+**/coverage/
+
+# Build outputs
+**/dist/
+**/build/
+**/out/
+
+# Logs
+**/*.log
+
+# Env files
+**/.env*
+*.pem
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Docker
+**/.docker
+
+# --------------------------------------
+# 🌐 Next.js (solo para frontend/)
+# --------------------------------------
+
+frontend/.next/
+frontend/.vercel/
+frontend/next-env.d.ts
+frontend/*.tsbuildinfo
+
+# --------------------------------------
+# 🔒 Seguridad
+# --------------------------------------
+
+# Ignore secrets, keys, etc.
+**/*.key
+**/*.crt
+**/*.pem
