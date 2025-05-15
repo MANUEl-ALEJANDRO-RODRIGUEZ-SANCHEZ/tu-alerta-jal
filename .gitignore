@@ -4,6 +4,7 @@
 
 # Node modules
 **/node_modules/
+**/**/node_modules/
 
 # Yarn, PNPM, NPM debug files
 **/.pnp
@@ -44,10 +45,10 @@ Thumbs.db
 # 🌐 Next.js (solo para frontend/)
 # --------------------------------------
 
-frontend/.next/
-frontend/.vercel/
-frontend/next-env.d.ts
-frontend/*.tsbuildinfo
+frontend/tu_alerta_jal/.next/
+frontend/tu_alerta_jal/.vercel/
+frontend/tu_alerta_jal/next-env.d.ts
+frontend/tu_alerta_jal/*.tsbuildinfo
 
 # --------------------------------------
 # 🔒 Seguridad
