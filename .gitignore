@@ -46,6 +46,8 @@ Thumbs.db
 # --------------------------------------
 
 frontend/tu_alerta_jal/.next/
+**/.next/
+**/**/.next/
 frontend/tu_alerta_jal/.vercel/
 frontend/tu_alerta_jal/next-env.d.ts
 frontend/tu_alerta_jal/*.tsbuildinfo
