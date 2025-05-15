@@ -45,6 +45,7 @@ Thumbs.db
 # 🌐 Next.js (solo para frontend/)
 # --------------------------------------
 
+.next/
 frontend/tu_alerta_jal/.next/
 **/.next/
 **/**/.next/
