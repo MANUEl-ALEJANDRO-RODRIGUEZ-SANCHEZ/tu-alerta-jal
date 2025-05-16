@@ -1,7 +1,14 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
 const Header = ({ user }) => {
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    const toggleMenu = () => setMenuOpen(!menuOpen);
+
     return (
         <header className="bg-white shadow-sm sticky top-0 z-10">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -73,7 +80,7 @@ const Header = ({ user }) => {
                         </button>
                         <div className="ml-3 relative">
                             <div>
-                                <button className="flex text-sm rounded-full focus:outline-none items-center">
+                                {/* <button className="flex text-sm rounded-full focus:outline-none items-center">
                                     <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
                                         <span className="text-gray-600 font-medium">
                                             {user.name.substring(0, 1)}
@@ -94,7 +101,71 @@ const Header = ({ user }) => {
                                             clipRule="evenodd"
                                         />
                                     </svg>
+                                </button> */}
+                                <button
+                                    className="flex text-sm rounded-full focus:outline-none items-center"
+                                    onClick={toggleMenu}
+                                >
+                                    <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                        <span className="text-gray-600 font-medium">
+                                            {user.name.substring(0, 1)}
+                                        </span>
+                                    </div>
+                                    <span className="ml-2 text-gray-700 text-sm hidden md:block">
+                                        {user.name.trim().split(/\s+/)[0]}
+                                    </span>
+                                    <svg
+                                        className="md:hidden ml-1 h-5 w-5 text-gray-400"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20"
+                                        fill="currentColor"
+                                    >
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clipRule="evenodd"
+                                        />
+                                    </svg>
                                 </button>
+                                {menuOpen && (
+                                    <div className="absolute right-1 z-20 md:hidden bg-white shadow-md rounded-md py-2 w-48 transition-all">
+                                        <Link
+                                            href="/home"
+                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            onClick={toggleMenu}
+                                        >
+                                            Inicio
+                                        </Link>
+                                        <Link
+                                            href="/dashboard/mis-reportes"
+                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            onClick={toggleMenu}
+                                        >
+                                            Mis Reportes
+                                        </Link>
+                                        <Link
+                                            href="/dashboard/mapa"
+                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            onClick={toggleMenu}
+                                        >
+                                            Mapa
+                                        </Link>
+                                        <Link
+                                            href="/dashboard/recursos"
+                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            onClick={toggleMenu}
+                                        >
+                                            Recursos
+                                        </Link>
+                                        <Link
+                                            href="/dashboard/comunidad"
+                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            onClick={toggleMenu}
+                                        >
+                                            Comunidad
+                                        </Link>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

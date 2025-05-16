@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3001;
 app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
 
-// 🔐 Registro de usuario
+//  Registro de usuario
 app.post("/register", async (req, res) => {
     const { name, email, password } = req.body;
     if (!name || !email || !password)
@@ -38,7 +38,7 @@ app.post("/register", async (req, res) => {
     }
 });
 
-// 🔐 Login
+//  Login
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -60,7 +60,7 @@ app.post("/login", async (req, res) => {
     }
 });
 
-// 🧪 Endpoint de prueba
+// Endpoint de prueba
 app.get("/user", async (req, res) => {
     const email = req.query.email;
     const [rows] = await pool.query(

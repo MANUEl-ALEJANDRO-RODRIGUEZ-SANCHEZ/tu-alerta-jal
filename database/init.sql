@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS reports (
   title TEXT NOT NULL,
   description TEXT NOT NULL,
   by_user VARCHAR(255),
+  locate VARCHAR(255),
+  category VARCHAR(255),
   date DATETIME DEFAULT CURRENT_TIMESTAMP,
   is_anonymous BOOLEAN DEFAULT FALSE,
   status VARCHAR(50) DEFAULT 'pendiente',
