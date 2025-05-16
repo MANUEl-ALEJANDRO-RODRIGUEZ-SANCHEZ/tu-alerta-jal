@@ -4,9 +4,6 @@ export default function Loading() {
             <div className="flex flex-col items-center">
                 {/* Logo */}
                 <div className="mb-8 flex items-center">
-                    <div className="h-12 w-12 bg-red-600 rounded-full flex items-center justify-center">
-                        <span className="text-white font-bold text-2xl">E</span>
-                    </div>
                     <span className="ml-3 text-2xl font-bold text-gray-900">
                         Tu Alerta JAL
                     </span>
