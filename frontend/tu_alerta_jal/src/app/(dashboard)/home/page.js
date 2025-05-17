@@ -5,11 +5,13 @@ import { redirect } from "next/navigation";
 import { useUser } from "@/context/UserContext";
 import Link from "next/link";
 import AddReportModal from "@/components/AddReportModal";
+import { getLatestReports } from "@/lib/querys";
 
 export default function HomePage() {
     const { user, setUserSession } = useUser();
     const [isAddReportModalVisible, setIsAddReportModalVisible] =
         useState(false);
+    const [recentReports, setRecentReports] = useState([]);
 
     if (!user || user.name.trim() === "" || user.email.trim() === "")
         return redirect("/login");
@@ -27,6 +29,15 @@ export default function HomePage() {
                 }
             );
         }
+
+        const fetchLatestReports = async (n) => {
+            let resQueryLatestReports = await getLatestReports(n);
+            if (resQueryLatestReports.status === 200) {
+                setRecentReports(resQueryLatestReports.data);
+            }
+        };
+
+        fetchLatestReports(4);
     }, []);
 
     return (
@@ -232,153 +243,46 @@ export default function HomePage() {
                                 </Link>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {/* Report 1 */}
-                                <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-                                    <div className="p-4">
-                                        <div className="flex justify-between">
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                Urgente
-                                            </span>
-                                            <span className="text-sm text-gray-500">
-                                                Hace 15 minutos
-                                            </span>
-                                        </div>
-                                        <h3 className="mt-2 text-lg font-medium text-gray-900">
-                                            Incendio en edificio residencial
-                                        </h3>
-                                        <p className="mt-1 text-sm text-gray-600">
-                                            Calle Reforma 123, Col. Centro
-                                        </p>
-                                        <div className="mt-3 flex justify-between items-center">
-                                            <div className="flex items-center">
-                                                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                                                    <span className="text-xs font-medium text-gray-600">
-                                                        MR
-                                                    </span>
-                                                </div>
-                                                <div className="ml-2">
-                                                    <p className="text-sm font-medium text-gray-900">
-                                                        María Rodríguez
-                                                    </p>
-                                                </div>
+                                {recentReports.map((report) => (
+                                    <div
+                                        className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
+                                        key={report.id}
+                                    >
+                                        <div className="p-4">
+                                            <div className="flex justify-between">
+                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                    Urgente
+                                                </span>
+                                                <span className="text-sm text-gray-500">
+                                                    {report.date}
+                                                </span>
                                             </div>
-                                            <button className="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200">
-                                                Detalles
-                                            </button>
+                                            <h3 className="mt-2 text-lg font-medium text-gray-900">
+                                                I{report.title}
+                                            </h3>
+                                            <p className="mt-1 text-sm text-gray-600">
+                                                Calle Reforma 123, Col. Centro
+                                            </p>
+                                            <div className="mt-3 flex justify-between items-center">
+                                                <div className="flex items-center">
+                                                    <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                                        <span className="text-xs font-medium text-gray-600">
+                                                            MR
+                                                        </span>
+                                                    </div>
+                                                    <div className="ml-2">
+                                                        <p className="text-sm font-medium text-gray-900">
+                                                            María Rodríguez
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <button className="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200">
+                                                    Detalles
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                {/* Report 2 */}
-                                <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-                                    <div className="p-4">
-                                        <div className="flex justify-between">
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                Moderado
-                                            </span>
-                                            <span className="text-sm text-gray-500">
-                                                Hace 30 minutos
-                                            </span>
-                                        </div>
-                                        <h3 className="mt-2 text-lg font-medium text-gray-900">
-                                            Inundación en vía pública
-                                        </h3>
-                                        <p className="mt-1 text-sm text-gray-600">
-                                            Av. Insurgentes Sur y Río Mixcoac
-                                        </p>
-                                        <div className="mt-3 flex justify-between items-center">
-                                            <div className="flex items-center">
-                                                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                                                    <span className="text-xs font-medium text-gray-600">
-                                                        CL
-                                                    </span>
-                                                </div>
-                                                <div className="ml-2">
-                                                    <p className="text-sm font-medium text-gray-900">
-                                                        Carlos López
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <button className="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200">
-                                                Detalles
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Report 3 */}
-                                <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-                                    <div className="p-4">
-                                        <div className="flex justify-between">
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                Resuelto
-                                            </span>
-                                            <span className="text-sm text-gray-500">
-                                                Hace 2 horas
-                                            </span>
-                                        </div>
-                                        <h3 className="mt-2 text-lg font-medium text-gray-900">
-                                            Árbol caído bloqueando calle
-                                        </h3>
-                                        <p className="mt-1 text-sm text-gray-600">
-                                            Calle Durango, Col. Roma Norte
-                                        </p>
-                                        <div className="mt-3 flex justify-between items-center">
-                                            <div className="flex items-center">
-                                                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                                                    <span className="text-xs font-medium text-gray-600">
-                                                        AG
-                                                    </span>
-                                                </div>
-                                                <div className="ml-2">
-                                                    <p className="text-sm font-medium text-gray-900">
-                                                        Ana García
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <button className="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200">
-                                                Resuelto
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Report 4 */}
-                                <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-                                    <div className="p-4">
-                                        <div className="flex justify-between">
-                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                Moderado
-                                            </span>
-                                            <span className="text-sm text-gray-500">
-                                                Hace 3 horas
-                                            </span>
-                                        </div>
-                                        <h3 className="mt-2 text-lg font-medium text-gray-900">
-                                            Fuga de gas en restaurante
-                                        </h3>
-                                        <p className="mt-1 text-sm text-gray-600">
-                                            Av. Álvaro Obregón 123, Col. Roma
-                                        </p>
-                                        <div className="mt-3 flex justify-between items-center">
-                                            <div className="flex items-center">
-                                                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                                                    <span className="text-xs font-medium text-gray-600">
-                                                        JM
-                                                    </span>
-                                                </div>
-                                                <div className="ml-2">
-                                                    <p className="text-sm font-medium text-gray-900">
-                                                        José Martínez
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <button className="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200">
-                                                Detalles
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                                ))}
                             </div>
                         </div>
 

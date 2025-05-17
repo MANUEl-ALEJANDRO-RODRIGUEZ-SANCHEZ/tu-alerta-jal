@@ -68,6 +68,22 @@ export async function getReportsByUser(email) {
     }
 }
 
+// Obtener los ultimos N reportes
+export async function getLatestReports(n) {
+    try {
+        const res = await fetch(`${API_URL}/latest/${n}`);
+
+        if (!res.ok) {
+            return { status: res.status, message: "Reportes no encontrados" };
+        }
+
+        const data = await res.json();
+        return { status: 200, message: "Reportes encontrados", data };
+    } catch (err) {
+        return { status: 500, message: "Error al obtener reportes" };
+    }
+}
+
 // Actualizar reporte
 export async function updateReport(id, data) {
     try {

@@ -69,6 +69,26 @@ router.get("/:email", async (req, res) => {
     }
 });
 
+// Obtener los N ultimos reportes
+router.get("/latest/:n", async (req, res) => {
+    const { n } = req.params;
+
+    try {
+        const [rows] = await pool.query(
+            "SELECT * FROM reports ORDER BY date DESC LIMIT ?",
+            [parseInt(n)]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ error: "No encontrados" });
+        }
+
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: "Error al obtener los reportes" });
+    }
+});
+
 // Modificar un reporte
 router.put("/:id", async (req, res) => {
     const { id } = req.params;

@@ -239,7 +239,13 @@ export default function ReportsPage() {
                                                 clipRule="evenodd"
                                             />
                                         </svg>
-                                        {report.locate}
+                                        <Link
+                                            href={`https://www.google.com/maps?q=${report.locate}`}
+                                            target="_blank"
+                                            className="text-red-600 hover:text-red-800"
+                                        >
+                                            Ir a google maps
+                                        </Link>
                                     </div>
                                     <div className="flex items-center mt-1">
                                         <svg
@@ -352,7 +358,6 @@ export default function ReportsPage() {
                                                 >
                                                     Ir a google maps
                                                 </Link>
-                                                {/* {report.locate} */}
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
