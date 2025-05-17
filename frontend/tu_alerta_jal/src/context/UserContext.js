@@ -5,10 +5,17 @@ import { createContext, useContext, useState } from "react";
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
-    const [user, setUser] = useState({ name: "", email: "" });
+    const [user, setUser] = useState({
+        name: "",
+        email: "",
+        location: "",
+    });
 
     const setUserSession = (data) => {
-        setUser({ name: data.name, email: data.email });
+        setUser((prev) => ({
+            ...prev,
+            ...data,
+        }));
     };
 
     return (

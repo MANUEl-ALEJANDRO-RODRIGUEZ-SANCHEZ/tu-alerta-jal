@@ -52,6 +52,23 @@ router.get("/:id", async (req, res) => {
     }
 });
 
+// Obtener los reportes hechos por un usuarios (email)
+router.get("/:email", async (req, res) => {
+    const { email } = req.params;
+
+    try {
+        const [rows] = await pool.query(
+            "SELECT * FROM reports WHERE by_user = ?",
+            [email]
+        );
+        if (rows.length === 0)
+            return res.status(404).json({ error: "No encontrado" });
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: "Error al obtener el reporte" });
+    }
+});
+
 // Modificar un reporte
 router.put("/:id", async (req, res) => {
     const { id } = req.params;

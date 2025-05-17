@@ -52,6 +52,22 @@ export async function getReport(id) {
     }
 }
 
+// Obtener los reportes hechos por un usuario
+export async function getReportsByUser(email) {
+    try {
+        const res = await fetch(`${API_URL}?email=${email}`);
+
+        if (!res.ok) {
+            return { status: res.status, message: "Reportes no encontrado" };
+        }
+
+        const data = await res.json();
+        return { status: 200, message: "Reportes encontrados", data };
+    } catch (err) {
+        return { status: 500, message: "Error al obtener reportes" };
+    }
+}
+
 // Actualizar reporte
 export async function updateReport(id, data) {
     try {

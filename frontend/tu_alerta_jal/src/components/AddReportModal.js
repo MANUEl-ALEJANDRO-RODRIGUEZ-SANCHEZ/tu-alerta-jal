@@ -4,6 +4,15 @@ import { useState } from "react";
 import * as querys from "@/lib/querys";
 import SimpleModal from "./SimpleModal";
 import { useUser } from "@/context/UserContext";
+import {
+    MapContainer,
+    TileLayer,
+    Marker,
+    Popup,
+    useMapEvents,
+} from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 
 const CATEGORIES = [
     { id: "medical", name: "Médica" },
@@ -16,6 +25,16 @@ const CATEGORIES = [
     { id: "other", name: "Otro" },
 ];
 
+function UbicacionSelector({ onSelect }) {
+    useMapEvents({
+        click(e) {
+            const { lat, lng } = e.latlng;
+            onSelect({ lat, lng });
+        },
+    });
+    return null;
+}
+
 const AddReportModal = ({ isOpen, onClose }) => {
     const [textAlert, setTextAlert] = useState("");
     const [textAlertIsVisible, setTextAlertIsVisible] = useState(false);
@@ -24,12 +43,19 @@ const AddReportModal = ({ isOpen, onClose }) => {
         title: "",
         description: "",
         by_user: user.email,
-        locate: "",
+        locate: null,
         category: "",
         is_anonymous: 0,
     });
 
     if (!isOpen) return null;
+
+    const locationFromUser = user.location
+        ? {
+              lat: parseFloat(user.location.split(",")[0]),
+              lng: parseFloat(user.location.split(",")[1]),
+          }
+        : null;
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -44,7 +70,11 @@ const AddReportModal = ({ isOpen, onClose }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        let resQuery = await querys.addReport(formData);
+        let resQuery = await querys.addReport({
+            ...formData,
+            locate: `${formData.location.lat},${formData.location.lng}`,
+        });
+
         if (resQuery.status === 200) {
             setTextAlert(resQuery.message);
             setTextAlertIsVisible(true);
@@ -70,6 +100,22 @@ const AddReportModal = ({ isOpen, onClose }) => {
         // e.target: es el elemento exacto sobre el que hiciste clic.
         // e.currentTarget: es el elemento que tiene el onClick asignado (el backdrop en este caso).
     };
+
+    const userLocationIcon = new L.Icon({
+        iconUrl: "/icons/location_user_mark.png",
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32],
+        shadowUrl: null,
+    });
+
+    const reportLocationIcon = new L.Icon({
+        iconUrl: "/icons/red_alert.png",
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32],
+        shadowUrl: null,
+    });
 
     return (
         <>
@@ -174,22 +220,72 @@ const AddReportModal = ({ isOpen, onClose }) => {
                             </div>
 
                             <div>
-                                <label
-                                    htmlFor="locate"
-                                    className="block text-sm font-medium text-gray-700"
-                                >
-                                    Ubicación
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Selecciona la ubicación
                                 </label>
-                                <input
-                                    type="text"
-                                    id="locate"
-                                    name="locate"
-                                    value={formData.locate}
-                                    onChange={handleChange}
-                                    required
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
-                                    placeholder="Ej: Av. Principal #123, entre Calle A y B"
-                                />
+                                <div className="w-full h-64 rounded overflow-hidden">
+                                    <MapContainer
+                                        center={
+                                            locationFromUser
+                                                ? [
+                                                      locationFromUser.lat,
+                                                      locationFromUser.lng,
+                                                  ]
+                                                : [20.6736, -103.344] // valor por defecto si no hay geolocalización
+                                        }
+                                        zoom={13}
+                                        className="h-full w-full z-10"
+                                    >
+                                        <TileLayer
+                                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
+                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        />
+
+                                        {/* Marcador fijo: ubicación del usuario */}
+                                        {locationFromUser && (
+                                            <Marker
+                                                position={[
+                                                    locationFromUser.lat,
+                                                    locationFromUser.lng,
+                                                ]}
+                                                icon={userLocationIcon}
+                                            >
+                                                <Popup>Tu ubicación</Popup>
+                                            </Marker>
+                                        )}
+
+                                        {/* Selector: guardar nueva ubicación al hacer clic */}
+                                        <UbicacionSelector
+                                            onSelect={(coords) =>
+                                                setFormData((prev) => ({
+                                                    ...prev,
+                                                    location: coords,
+                                                }))
+                                            }
+                                        />
+
+                                        {/*  Marcador del reporte */}
+                                        {formData.location && (
+                                            <Marker
+                                                position={[
+                                                    formData.location.lat,
+                                                    formData.location.lng,
+                                                ]}
+                                                icon={reportLocationIcon}
+                                            >
+                                                <Popup>
+                                                    Ubicación del reporte
+                                                </Popup>
+                                            </Marker>
+                                        )}
+                                    </MapContainer>
+                                </div>
+                                {!formData.location && (
+                                    <p className="text-xs text-gray-500 mt-1">
+                                        Da clic en el mapa para elegir la
+                                        ubicación.
+                                    </p>
+                                )}
                             </div>
 
                             <div className="flex items-center">

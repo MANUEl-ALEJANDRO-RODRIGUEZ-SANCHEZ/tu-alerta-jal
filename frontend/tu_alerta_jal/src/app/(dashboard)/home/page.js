@@ -1,18 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { redirect } from "next/navigation";
 import { useUser } from "@/context/UserContext";
 import Link from "next/link";
 import AddReportModal from "@/components/AddReportModal";
 
 export default function HomePage() {
-    const { user } = useUser();
+    const { user, setUserSession } = useUser();
     const [isAddReportModalVisible, setIsAddReportModalVisible] =
         useState(false);
 
     if (!user || user.name.trim() === "" || user.email.trim() === "")
         return redirect("/login");
+
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const { latitude, longitude } = pos.coords;
+                    console.log("Ubicación:", latitude, longitude);
+                    setUserSession({ location: `${latitude},${longitude}` });
+                },
+                (err) => {
+                    console.error("Error al pedir ubicación:", err.message);
+                }
+            );
+        }
+    }, []);
 
     return (
         <>
@@ -122,7 +137,7 @@ export default function HomePage() {
                                     </span>
                                 </Link>
                                 <Link
-                                    href="/dashboard/mis-reportes"
+                                    href="/my-reports"
                                     className="bg-white text-gray-800 rounded-lg p-4 text-center hover:bg-gray-50 transition-colors shadow-md border border-gray-200"
                                 >
                                     <svg
