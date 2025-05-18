@@ -126,7 +126,7 @@ export default function HomePage() {
                                     </span>
                                 </button>
                                 <Link
-                                    href="/dashboard/mapa"
+                                    href="/map"
                                     className="bg-white text-gray-800 rounded-lg p-4 text-center hover:bg-gray-50 transition-colors shadow-md border border-gray-200"
                                 >
                                     <svg
@@ -201,7 +201,7 @@ export default function HomePage() {
                                     Emergencias cercanas
                                 </h2>
                                 <Link
-                                    href="/dashboard/mapa"
+                                    href="/map"
                                     className="text-sm text-red-600 hover:text-red-800"
                                 >
                                     Ver mapa completo →
@@ -236,7 +236,7 @@ export default function HomePage() {
                                     Reportes recientes
                                 </h2>
                                 <Link
-                                    href="/dashboard/reportes"
+                                    href="/reports"
                                     className="text-sm text-red-600 hover:text-red-800"
                                 >
                                     Ver todos →
@@ -258,11 +258,14 @@ export default function HomePage() {
                                                 </span>
                                             </div>
                                             <h3 className="mt-2 text-lg font-medium text-gray-900">
-                                                I{report.title}
+                                                {report.title}
                                             </h3>
-                                            <p className="mt-1 text-sm text-gray-600">
-                                                Calle Reforma 123, Col. Centro
-                                            </p>
+                                            <Link
+                                                href={`https://www.google.com/maps?q=${report.locate}`}
+                                                className="mt-1 text-sm text-red-600 border-b-2"
+                                            >
+                                                Ir a la ubicacion
+                                            </Link>
                                             <div className="mt-3 flex justify-between items-center">
                                                 <div className="flex items-center">
                                                     <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
